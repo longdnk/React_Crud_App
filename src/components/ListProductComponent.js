@@ -32,14 +32,14 @@ class ListProductComponent extends Component {
 		const config = {
 			headers: { Authorization: `Bearer ${token}` }
 		}
+		this.props.getProducts(1);
+		// axios.get("http://34.124.251.21:8000/api/v1/admin/products/?page=1", config).then((res) => {
+		// 	this.setState({
+		// 		products: res.data.data.data,
+		// 		itemCount: res.data.data.total
+		// 	});
 
-		axios.get("http://34.124.251.21:8000/api/v1/admin/products/?page=1", config).then((res) => {
-			this.setState({
-				products: res.data.data.data,
-				itemCount: res.data.data.total
-			});
-
-		})
+		// })
 	}
 	handlePageChange = pageNumber => {
 		var retrievedObject = localStorage.getItem('token');
@@ -87,6 +87,10 @@ class ListProductComponent extends Component {
 	});
 
 	render() {
+		const data = this.props.example;
+		const productList = data.products.data;
+		const productLength = data.products.length;
+		const dataLoading = data.products.loading;
 		return (
 			<div className="container nav-md body">
 				<div className="main_container">
@@ -140,6 +144,12 @@ class ListProductComponent extends Component {
 
 										<div className="x_content">
 											<div className="table-responsive">
+												{dataLoading ?
+													<div>
+														Test loading
+													</div>
+													: null
+												}
 												<table className="table table-striped jambo_table bulk_action">
 													<thead>
 														<tr className="headings">
@@ -161,7 +171,7 @@ class ListProductComponent extends Component {
 													</thead>
 													<tbody>
 														{
-															this.state.products.map((data, i) => {
+															productList.map((data, i) => {
 																return (
 																	<tr key={i} className="even pointer">
 																		<td className="table-td-center">
@@ -189,7 +199,7 @@ class ListProductComponent extends Component {
 												<Pagination
 													activePage={this.state.currentPage}
 													itemsCountPerPage={25}
-													totalItemsCount={this.state.itemCount}
+													totalItemsCount={productLength}
 													pageRangeDisplayed={1}
 													onChange={this.handlePageChange}
 													breakClassName={'page-item'}

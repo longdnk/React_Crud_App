@@ -35,10 +35,34 @@ export function fetch() {
 }
 
 export function getProducts(PageNumber) {
+    let url = Product_API_BASE_URL;
+    var retrievedObject = localStorage.getItem('token');
+    const token = retrievedObject;
+    const config = {
+        headers: { Authorization: `Bearer ${token}` }
+    }
+    return dispatch => {
+        dispatch(getProductLoadingAction())
+        return axios.get(url, config).then(res => {
+            dispatch(getProductsAction(res))
+        }).catch(e => {
+            console.log(e);
+        });
+    }
+}
+
+export function getProductsAction(res) {
     return {
         type: CONSTANTS.GET_PRODUCT_ACTION,
-        payload: axios.get(Product_API_BASE_URL + '/?page=' + PageNumber, config),
-    }
+        payload: res.data.data,
+    };
+}
+
+export function getProductLoadingAction() {
+    return {
+        type: CONSTANTS.GET_PRODUCT_ACTION_LOADING,
+        payload: null,
+    };
 }
 
 export function createProduct(Product) {

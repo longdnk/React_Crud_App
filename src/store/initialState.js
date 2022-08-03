@@ -1,7 +1,10 @@
 // init info
 const initialState = {
-    products: [],
-    product: {},
+    products: {
+        data: [],
+        length: 0,
+        loading: false
+    },
     fetch: {
         loading: false,
         data: null
