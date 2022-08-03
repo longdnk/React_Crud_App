@@ -6,7 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { createProduct, deleteProduct, getProductById, getProducts, updateProduct } from '../store/actions';
 import { connect } from 'react-redux';
-
+import * as action from '../store/actions'
 
 class CreateProductComponent extends Component {
     constructor(props) {
@@ -303,6 +303,9 @@ function mapDispatchToProps(dispatch) {
         },
         deleteProduct: (ProductId) => {
             dispatch(deleteProduct(ProductId));
+        },
+        fetch: () => {
+            dispatch(fetch());
         },
     };
 }
