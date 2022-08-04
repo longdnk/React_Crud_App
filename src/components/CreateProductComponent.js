@@ -31,17 +31,10 @@ class CreateProductComponent extends Component {
 
     componentDidMount() {
         if (this.state.id === '_add') {
-            return
-        } else {
-            ProductService.getProductById(this.state.id).then((res) => {
-                let product = res.data.data;
-                this.setState({
-                    name: product.name,
-                    price: product.price,
-                    unit: product.unit,
-                    description: product.description
-                });
-            });
+            return;
+        }
+        else {
+            this.props.getProductById(this.state.id);
         }
     }
     getNotice() {
@@ -67,7 +60,7 @@ class CreateProductComponent extends Component {
         let product = { name: this.state.name, price: this.state.price, unit: this.state.unit, description: this.state.description };
 
         if (this.state.id === '_add') {
-            ProductService.createProduct(product).then(res => {
+            this.props.createProduct(product).then(res => {
                 if (res.data.message === "Data invalid") {
                     if (res.data.errors.name != undefined) {
                         this.setState({ messageName: res.data.errors.name[0] })
@@ -96,7 +89,7 @@ class CreateProductComponent extends Component {
                 }
             });
         } else {
-            ProductService.updateProduct(product, this.state.id).then(res => {
+            this.props.updateProduct(product, this.state.id).then(res => {
                 if (res.data.message === "Data invalid") {
                     if (res.data.errors.name != undefined) {
                         this.setState({ messageName: res.data.errors.name[0] })
@@ -169,6 +162,7 @@ class CreateProductComponent extends Component {
     }
 
     render() {
+        const detail_Data = this.props.example.products.data;
         return (
             <div className="container nav-md body">
                 <div className="main_container">
@@ -221,26 +215,30 @@ class CreateProductComponent extends Component {
                                                     <label className="col-form-label col-md-3 col-sm-3  label-align">Name Product  {this.messageName}<span className="required">*</span></label>
                                                     <div className="col-md-6 col-sm-6">
                                                         <div className="alret-field">{this.state.messageName}</div>
-                                                        <input className="form-control" value={this.state.name} onChange={this.changeNameHandler} data-validate-length-range="6" data-validate-words="2" name="name" placeholder="ex. Quần short " required="required" />
+                                                        {/* <input className="form-control" value={this.state.name} onChange={this.changeNameHandler} data-validate-length-range="6" data-validate-words="2" name="name" placeholder="ex. Quần short " required="required" /> */}
+                                                        <input className="form-control" value={detail_Data.name} onChange={this.changeNameHandler} data-validate-length-range="6" data-validate-words="2" name="name" placeholder="ex. Quần short " required="required" />
                                                     </div>
                                                 </div>
                                                 <div className="field item form-group">
                                                     <label className="col-form-label col-md-3 col-sm-3  label-align">Price<span className="required">*</span></label>
                                                     <div className="col-md-6 col-sm-6">
                                                         <div className="alret-field">{this.state.messagePrice}</div>
-                                                        <input className="form-control optional" value={this.state.price} onChange={this.changePriceHandler} name="price" data-validate-length-range="5,15" type="number" />
+                                                        {/* <input className="form-control optional" value={this.state.price} onChange={this.changePriceHandler} name="price" data-validate-length-range="5,15" type="number" /> */}
+                                                        <input className="form-control optional" value={detail_Data.price} onChange={this.changePriceHandler} name="price" data-validate-length-range="5,15" type="number" />
                                                     </div>
                                                 </div>
                                                 <div className="field item form-group">
                                                     <label className="col-form-label col-md-3 col-sm-3  label-align">Unit <span className="required">*</span></label>
                                                     <div className="col-md-6 col-sm-6">
                                                         <div className="alret-field">{this.state.messageUnit}</div>
-                                                        <input className="form-control" value={this.state.unit} onChange={this.changeUnitHandler} type="text" name="unit" data-validate-minmax="10,100" required='required' /></div>
+                                                        {/* <input className="form-control" value={this.state.unit} onChange={this.changeUnitHandler} type="text" name="unit" data-validate-minmax="10,100" required='required' /></div> */}
+                                                        <input className="form-control" value={detail_Data.unit} onChange={this.changeUnitHandler} type="text" name="unit" data-validate-minmax="10,100" required='required' /></div>
                                                 </div>
                                                 <div className="field item form-group">
                                                     <label className="col-form-label col-md-3 col-sm-3  label-align">Description<span className="required">*</span></label>
                                                     <div className="col-md-6 col-sm-6">
-                                                        <textarea className="form-control date" value={this.state.description} onChange={this.changeDescriptionHandler} type="text" name="description" rows={10} required='required' /></div>
+                                                        {/* <textarea className="form-control date" value={this.state.description} onChange={this.changeDescriptionHandler} type="text" name="description" rows={10} required='required' /></div> */}
+                                                        <textarea className="form-control date" value={detail_Data.description} onChange={this.changeDescriptionHandler} type="text" name="description" rows={10} required='required' /></div>
                                                 </div>
 
                                                 <div className="form-group">

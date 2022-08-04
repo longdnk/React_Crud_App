@@ -8,7 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { createProduct, deleteProduct, getProductById, getProducts, updateProduct } from '../store/actions';
 import { connect } from 'react-redux';
-import * as action from '../store/actions'
+import ListProductComponent from './ListProductComponent';
 
 class ViewProductComponent extends Component {
     constructor(props) {
@@ -16,7 +16,7 @@ class ViewProductComponent extends Component {
 
         this.state = {
             id: this.props.match.params.id,
-            product: {}
+            product: {},
         }
         this.editProduct = this.editProduct.bind(this);
         this.deleteProduct = this.deleteProduct.bind(this);
@@ -39,28 +39,34 @@ class ViewProductComponent extends Component {
     });
 
     componentDidMount() {
-        ProductService.getProductById(this.state.id).then(res => {
-            this.setState({ product: res.data.data });
-        })
+        // ProductService.getProductById(this.state.id).then(res => {
+        //     this.setState({ product: res.data.data });
+        // })
+        this.props.getProductById(this.state.id);
     }
+
     editProduct(id) {
         this.props.history.push(`/add-product/${id}`);
     }
+
     deleteProduct(id) {
         ProductService.deleteProduct(id).then(res => {
             this.setState({ products: this.state.products.filter(product => product.id !== id) });
         });
         this.notify();
     }
+
     cancel() {
         return this.props.history.push('/');
     }
 
     render() {
-        if (this.state.product === null) {
+        const detail_Data = this.props.example;
+        if (detail_Data.products === null) {
             return <PageNotFound />
         }
         else {
+            const infoData = detail_Data.products.data;
             return (
                 <div className="container nav-md body">
                     <div className="main_container">
@@ -104,37 +110,45 @@ class ViewProductComponent extends Component {
                                                     <tbody>
                                                         <tr>
                                                             <th className="col-2">Product Name</th>
-                                                            <td className="col-10">{this.state.product.name}</td>
+                                                            {/* <td className="col-10">{this.state.product.name}</td> */}
+                                                            <td className="col-10">{infoData.name}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Unit</th>
-                                                            <td>{this.state.product.unit}</td>
+                                                            {/* <td>{this.state.product.unit}</td> */}
+                                                            <td>{infoData.unit}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Price</th>
                                                             {/* <td>{this.state.product.price}</td> */}
-                                                            <td>{this.formatMoney(this.state.product.price)}</td>
+                                                            {/* <td>{this.formatMoney(this.state.product.price)}</td> */}
+                                                            <td>{this.formatMoney(infoData.price)}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Creator</th>
-                                                            <td>{this.state.product.created_user}</td>
+                                                            {/* <td>{this.state.product.created_user}</td> */}
+                                                            <td>{infoData.created_user}</td>
                                                         </tr>
 
                                                         <tr>
                                                             <th>Date Created</th>
-                                                            <td>{this.state.product.created_at = Moment().format('DD-MM-YYYY')}</td>
+                                                            {/* <td>{this.state.product.created_at = Moment().format('DD-MM-YYYY')}</td> */}
+                                                            <td>{infoData.created_at = Moment().format('DD-MM-YYYY')}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Updater</th>
-                                                            <td>{this.state.product.updated_user}</td>
+                                                            {/* <td>{this.state.product.updated_user}</td> */}
+                                                            <td>{infoData.updated_user}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Update Day</th>
-                                                            <td>{this.state.product.updated_at = Moment().format('DD-MM-YYYY')}</td>
+                                                            {/* <td>{this.state.product.updated_at = Moment().format('DD-MM-YYYY')}</td> */}
+                                                            <td>{infoData.updated_at = Moment().format('DD-MM-YYYY')}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Description</th>
-                                                            <td>{this.state.product.description}</td>
+                                                            {/* <td>{this.state.product.description}</td> */}
+                                                            <td>{infoData.description}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -142,7 +156,7 @@ class ViewProductComponent extends Component {
                                                     <div className="col-auto mr-auto"> </div>
                                                     <div className="col-auto">
                                                         <div className="btn-group mr-2" role="group" aria-label="First group">
-                                                            <button className="btn btn-info" onClick={() => this.editProduct(this.state.product.id)}>
+                                                            <button className="btn btn-info" onClick={() => this.editProduct(infoData.id)}>
                                                                 <i className="fa fa-edit"></i>
                                                             </button>
 
@@ -178,7 +192,7 @@ class ViewProductComponent extends Component {
                                 </div>
                                 <div className="modal-footer">
                                     <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="button" className="btn btn-danger" data-dismiss="modal" onClick={() => this.deleteProduct(this.state.product.id)}>Delete</button>
+                                    <button type="button" className="btn btn-danger" data-dismiss="modal" onClick={() => this.deleteProduct(infoData.id)}>Delete</button>
                                 </div>
                             </div>
                         </div>

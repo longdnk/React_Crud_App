@@ -17,6 +17,7 @@ import { Link } from 'react-router-dom';
         const data = JSON.parse(retrievedObject);
         let firstName = data.first_name;
         let lastName = data.last_name;
+        let role = data.username
         return (
             <>
                 <div className="col-md-3 left_col">
@@ -29,11 +30,11 @@ import { Link } from 'react-router-dom';
 
                         <div className="profile clearfix">
                             <div className="profile_pic">
-                                <img src="../images/img.jpg" alt="..." className="img-circle profile_img" />
+                                <img src="../images/cuongxautrai.png" alt="..." className="img-circle profile_img" />
                             </div>
                             <div className="profile_info">
                                 <span>Welcome,</span>
-                                <h2>{firstName} {lastName}</h2>
+                                <h2>{firstName} {lastName} - {role}</h2>
                             </div>
                         </div>
                         <br />

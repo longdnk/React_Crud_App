@@ -26,33 +26,14 @@ class ListProductComponent extends Component {
 		this.deleteProduct = this.deleteProduct.bind(this);
 		this.saveAndContinue = this.saveAndContinue.bind(this);
 	}
+
 	componentDidMount() {
-		var retrievedObject = localStorage.getItem('token');
-		const token = retrievedObject;
-		const config = {
-			headers: { Authorization: `Bearer ${token}` }
-		}
-		this.props.getProducts(1);
-		// axios.get("http://34.124.251.21:8000/api/v1/admin/products/?page=1", config).then((res) => {
-		// 	this.setState({
-		// 		products: res.data.data.data,
-		// 		itemCount: res.data.data.total
-		// 	});
-
-		// })
+		return this.props.getProducts(1);
 	}
-	handlePageChange = pageNumber => {
-		var retrievedObject = localStorage.getItem('token');
-		const token = retrievedObject;
-		const config = {
-			headers: { Authorization: `Bearer ${token}` }
-		}
 
-		axios.get("http://34.124.251.21:8000/api/v1/admin/products/?page=" + pageNumber, config)
-			.then(res => {
-				this.setState({ products: res.data.data.data });
-			});
-		this.setState({ currentPage: pageNumber });
+	handlePageChange = pageNumber => {
+		this.state.currentPage = pageNumber;
+		this.props.getProducts(pageNumber);
 	};
 
 
@@ -61,6 +42,7 @@ class ListProductComponent extends Component {
 			this.setState({ products: this.state.products.filter(product => product.id !== id) });
 		});
 	}
+
 	viewProduct(id) {
 		this.props.history.push(`/product/${id}`);
 	}
@@ -68,9 +50,11 @@ class ListProductComponent extends Component {
 	saveAndContinue(id) {
 		this.setState({ IDDelete: id })
 	}
+
 	addProduct() {
 		this.props.history.push('/add-product/_add');
 	}
+
 	formatMoney = (amt) => {
 		var money = new Intl.NumberFormat("en-US", { style: "currency", "currency": "VND" }).format(amt);
 		return money;
@@ -91,6 +75,7 @@ class ListProductComponent extends Component {
 		const productList = data.products.data;
 		const productLength = data.products.length;
 		const dataLoading = data.products.loading;
+		this.state.itemCount = productLength;
 		return (
 			<div className="container nav-md body">
 				<div className="main_container">
@@ -146,7 +131,7 @@ class ListProductComponent extends Component {
 											<div className="table-responsive">
 												{dataLoading ?
 													<div>
-														Test loading
+														Loading Data...
 													</div>
 													: null
 												}
@@ -171,6 +156,7 @@ class ListProductComponent extends Component {
 													</thead>
 													<tbody>
 														{
+															Array.isArray(productList) ? 
 															productList.map((data, i) => {
 																return (
 																	<tr key={i} className="even pointer">
@@ -191,7 +177,7 @@ class ListProductComponent extends Component {
 																		</td>
 																	</tr>
 																)
-															})
+															}) : []
 														}
 													</tbody>
 												</table>
@@ -199,8 +185,8 @@ class ListProductComponent extends Component {
 												<Pagination
 													activePage={this.state.currentPage}
 													itemsCountPerPage={25}
-													totalItemsCount={productLength}
-													pageRangeDisplayed={1}
+													totalItemsCount={this.state.itemCount}
+													pageRangeDisplayed={0}
 													onChange={this.handlePageChange}
 													breakClassName={'page-item'}
 

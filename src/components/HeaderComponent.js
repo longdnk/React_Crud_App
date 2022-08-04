@@ -16,8 +16,7 @@ class HeaderComponent extends Component {
 	render() {
 		var retrievedObject = localStorage.getItem('data');
 		const data = JSON.parse(retrievedObject);
-		let firstName = data.first_name;
-		let lastName = data.last_name;
+		let role = data.username;
 		return (
 			<div>
 				<div className="top_nav">
@@ -29,7 +28,7 @@ class HeaderComponent extends Component {
 							<ul className=" navbar-right">
 								<li className="nav-item dropdown open" style={{ paddingLeft: 15 }}>
 									<a href="#" className="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-										<img src="../images/img.jpg" alt="" />{firstName} {lastName}
+										<img src="../images/cuongxautrai.png" alt="" />{role}
 									</a>
 									<div className="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
 										<a className="dropdown-item" href="#"> Profile</a>

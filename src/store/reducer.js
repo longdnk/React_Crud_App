@@ -42,26 +42,18 @@ export function reducer(state = initialState, action) {
         case CONSTANTS.GET_PRODUCT_BY_ID_ACTION:
             return {
                 ...state,
-                products: action.payload,
+                products: {
+                    data: action.payload,
+                },
                 loading: false,
             }
-        case CONSTANTS.FETCH_ACTION:
+        case CONSTANTS.GET_PRODUCT_BY_ID_ACTION_LOADING:
             return {
                 ...state,
-                fetch: {
-                    ...state.fetch,
-                    products: action.payload,
-                    loading: false
-                },
-            }
-        case CONSTANTS.FETCH_LOADING_ACTION:
-            return {
-                ...state,
-                fetch: {
-                    ...state.fetch,
-                    products: action.payload,
-                    loading: true
-                },
+                products: {
+                    data: [],
+                    loading: true,
+                }
             }
         default:
             return state;
