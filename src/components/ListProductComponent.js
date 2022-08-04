@@ -75,7 +75,6 @@ class ListProductComponent extends Component {
 		const productList = data.products.data;
 		const productLength = data.products.length;
 		const dataLoading = data.products.loading;
-		this.state.itemCount = productLength;
 		return (
 			<div className="container nav-md body">
 				<div className="main_container">
@@ -185,7 +184,7 @@ class ListProductComponent extends Component {
 												<Pagination
 													activePage={this.state.currentPage}
 													itemsCountPerPage={25}
-													totalItemsCount={this.state.itemCount}
+													totalItemsCount={productLength}
 													pageRangeDisplayed={0}
 													onChange={this.handlePageChange}
 													breakClassName={'page-item'}

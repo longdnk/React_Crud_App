@@ -8,7 +8,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { createProduct, deleteProduct, getProductById, getProducts, updateProduct } from '../store/actions';
 import { connect } from 'react-redux';
-import ListProductComponent from './ListProductComponent';
 
 class ViewProductComponent extends Component {
     constructor(props) {
@@ -17,6 +16,7 @@ class ViewProductComponent extends Component {
         this.state = {
             id: this.props.match.params.id,
             product: {},
+            products: []
         }
         this.editProduct = this.editProduct.bind(this);
         this.deleteProduct = this.deleteProduct.bind(this);
@@ -50,9 +50,7 @@ class ViewProductComponent extends Component {
     }
 
     deleteProduct(id) {
-        ProductService.deleteProduct(id).then(res => {
-            this.setState({ products: this.state.products.filter(product => product.id !== id) });
-        });
+        this.props.deleteProduct(id);
         this.notify();
     }
 

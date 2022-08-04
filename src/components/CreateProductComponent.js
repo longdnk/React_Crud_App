@@ -14,10 +14,10 @@ class CreateProductComponent extends Component {
 
         this.state = {
             id: this.props.match.params.id,
-            name: '',
-            price: '',
-            unit: '',
-            description: '',
+            name: "",
+            price: "",
+            unit: "",
+            description: "",
             messageName: "",
             messagePrice: "",
             messageUnit: ""
@@ -118,8 +118,6 @@ class CreateProductComponent extends Component {
                 }
             });
         }
-
-
     }
 
     changeNameHandler = (event) => {
@@ -146,13 +144,17 @@ class CreateProductComponent extends Component {
         }
 
     }
+
     getTitle() {
+        let text = '';
         if (this.state.id === '_add') {
-            return <h3 className="text-center">Add Product</h3>
+            text = "Add Product";
         } else {
-            return <h3 className="text-center">Update Product</h3>
+            text = "Update Product";
         }
+        return text;
     }
+
     getpModal() {
         if (this.state.id === '_add') {
             return "create"
@@ -163,6 +165,7 @@ class CreateProductComponent extends Component {
 
     render() {
         const detail_Data = this.props.example.products.data;
+        // console.log(detail_Data.name, detail_Data.price, detail_Data.unit, detail_Data.description);
         return (
             <div className="container nav-md body">
                 <div className="main_container">
@@ -206,9 +209,7 @@ class CreateProductComponent extends Component {
                                             <form className="" action="" method="post" noValidate>
 
                                                 <span className="section">
-                                                    {
-                                                        this.getTitle()
-                                                    }
+                                                    <h3 className="text-center">{this.getTitle()}</h3>
                                                 </span>
 
                                                 <div className="field item form-group">

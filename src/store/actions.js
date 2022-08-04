@@ -2,11 +2,6 @@ import axios from 'axios';
 import * as CONSTANTS from "./constants"
 
 const Product_API_BASE_URL = "http://34.124.251.21:8000/api/v1/admin/products";
-var retrievedObject = localStorage.getItem('token');
-const token = retrievedObject;
-const config = {
-    headers: { Authorization: `Bearer ${token}` }
-}
 
 export function getProducts(PageNumber) {
     let url = Product_API_BASE_URL + "/?page=" + PageNumber;
@@ -102,15 +97,63 @@ export function createProductLoadingAction() {
 }
 
 export function updateProduct(Product, ProductId) {
-    return {
-        type: CONSTANTS.UPDATE_PRODUCT_ACTION,
-        payload: axios.post(Product_API_BASE_URL + '/' + ProductId, Product, config),
+    let url = Product_API_BASE_URL + '/' + ProductId;
+    var retrievedObject = localStorage.getItem('token');
+    const token = retrievedObject;
+    const config = {
+        headers: { Authorization: `Bearer ${token}` }
+    }
+    return dispatch => {
+        dispatch(updateProductActionLoading())
+        return axios.post(url, Product, config).then(res => {
+            dispatch(updateProductAction(res))
+        }).catch(e => {
+            console.log(e);
+        });
     }
 }
 
+export function updateProductAction(res) {
+    return {
+        type: CONSTANTS.UPDATE_PRODUCT_ACTION,
+        payload: res.data.data,
+    };
+}
+
+export function updateProductActionLoading() {
+    return {
+        type: CONSTANTS.UPDATE_PRODUCT_ACTION_LOADING,
+        payload: null,
+    };
+}
+
 export function deleteProduct(ProductId) {
+    let url = Product_API_BASE_URL + '/' + ProductId;
+    var retrievedObject = localStorage.getItem('token');
+    const token = retrievedObject;
+    const config = {
+        headers: { Authorization: `Bearer ${token}` }
+    }
+    return dispatch => {
+        dispatch(deleteProductActionLoading())
+        return axios.delete(url, ProductId, config).then(res => {
+            dispatch(deleteProductAction(res))
+        }).catch(e => {
+            console.log(e);
+        });
+    }
+}
+
+export function deleteProductAction(res) {
     return {
         type: CONSTANTS.DELETE_PRODUCT_ACTION,
-        payload: axios.delete(Product_API_BASE_URL + '/' + ProductId, config),
-    }
+        payload: res.data.data,
+    };
+}
+
+export function deleteProductActionLoading() {
+    return {
+        type: CONSTANTS.DELETE_PRODUCT_ACTION_LOADING,
+        payload: null,
+    };
 }
