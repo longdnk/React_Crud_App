@@ -9,6 +9,15 @@ export function reducer(state = initialState, action) {
                 products: action.payload,
                 loading: false,
             }
+        case CONSTANTS.CREATE_PRODUCT_ACTION_LOADING:
+            return {
+                ...state,
+                products: {
+                    data: [],
+                    length: 0,
+                    loading: true,
+                }
+            }
         case CONSTANTS.UPDATE_PRODUCT_ACTION:
             return {
                 ...state,

@@ -217,7 +217,7 @@ class CreateProductComponent extends Component {
                                                     <div className="col-md-6 col-sm-6">
                                                         <div className="alret-field">{this.state.messageName}</div>
                                                         {/* <input className="form-control" value={this.state.name} onChange={this.changeNameHandler} data-validate-length-range="6" data-validate-words="2" name="name" placeholder="ex. Quần short " required="required" /> */}
-                                                        <input className="form-control" value={detail_Data.name} onChange={this.changeNameHandler} data-validate-length-range="6" data-validate-words="2" name="name" placeholder="ex. Quần short " required="required" />
+                                                        <input className="form-control" defaultValue={detail_Data.name || ''} onChange={this.changeNameHandler} data-validate-length-range="6" data-validate-words="2" name="name" placeholder="ex. Quần short " required="required" />
                                                     </div>
                                                 </div>
                                                 <div className="field item form-group">
@@ -225,7 +225,7 @@ class CreateProductComponent extends Component {
                                                     <div className="col-md-6 col-sm-6">
                                                         <div className="alret-field">{this.state.messagePrice}</div>
                                                         {/* <input className="form-control optional" value={this.state.price} onChange={this.changePriceHandler} name="price" data-validate-length-range="5,15" type="number" /> */}
-                                                        <input className="form-control optional" value={detail_Data.price} onChange={this.changePriceHandler} name="price" data-validate-length-range="5,15" type="number" />
+                                                        <input className="form-control optional" defaultValue={detail_Data.price || ''} onChange={this.changePriceHandler} name="price" data-validate-length-range="5,15" type="number" />
                                                     </div>
                                                 </div>
                                                 <div className="field item form-group">
@@ -233,13 +233,13 @@ class CreateProductComponent extends Component {
                                                     <div className="col-md-6 col-sm-6">
                                                         <div className="alret-field">{this.state.messageUnit}</div>
                                                         {/* <input className="form-control" value={this.state.unit} onChange={this.changeUnitHandler} type="text" name="unit" data-validate-minmax="10,100" required='required' /></div> */}
-                                                        <input className="form-control" value={detail_Data.unit} onChange={this.changeUnitHandler} type="text" name="unit" data-validate-minmax="10,100" required='required' /></div>
+                                                        <input className="form-control" defaultValue={detail_Data.unit || ''} onChange={this.changeUnitHandler} type="text" name="unit" data-validate-minmax="10,100" required='required' /></div>
                                                 </div>
                                                 <div className="field item form-group">
                                                     <label className="col-form-label col-md-3 col-sm-3  label-align">Description<span className="required">*</span></label>
                                                     <div className="col-md-6 col-sm-6">
                                                         {/* <textarea className="form-control date" value={this.state.description} onChange={this.changeDescriptionHandler} type="text" name="description" rows={10} required='required' /></div> */}
-                                                        <textarea className="form-control date" value={detail_Data.description} onChange={this.changeDescriptionHandler} type="text" name="description" rows={10} required='required' /></div>
+                                                        <textarea className="form-control date" defaultValue={detail_Data.description || ''} onChange={this.changeDescriptionHandler} type="text" name="description" rows={10} required='required' /></div>
                                                 </div>
 
                                                 <div className="form-group">

@@ -75,7 +75,7 @@ export function createProduct(Product) {
     return dispatch => {
         dispatch(createProductLoadingAction());
         return axios.post(url, Product, config).then(res => {
-            dispatch(createProductAction(res));
+            dispatch(createProductAction(res.data.data));
         }).catch(e => {
             console.log(e);
         });
@@ -85,7 +85,7 @@ export function createProduct(Product) {
 export function createProductAction(res) {
     return {
         type: CONSTANTS.CREATE_PRODUCT_ACTION,
-        payload: res.data.data,
+        payload: res,
     };
 }
 

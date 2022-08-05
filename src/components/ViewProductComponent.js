@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import ProductService from '../services/ProductService'
 import HeaderComponent from './HeaderComponent';
 import LeftNavBar from './elements/LeftNavBar';
 import PageNotFound from './404';
@@ -23,7 +22,7 @@ class ViewProductComponent extends Component {
     }
 
     formatMoney = (amt) => {
-        var money = new Intl.NumberFormat("en-US", { style: "currency", "currency": "VND" }).format(amt);
+        var money = new Intl.NumberFormat("de-DE", { style: "currency", "currency": "VND" }).format(amt);
         return money;
     };
 

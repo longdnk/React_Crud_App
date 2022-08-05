@@ -1,15 +1,13 @@
 import React, { Component } from 'react'
-import ProductService from '../services/ProductService'
 import HeaderComponent from './HeaderComponent';
 import Moment from 'moment';
-import axios from 'axios';
 import LeftNavBar from './elements/LeftNavBar';
 import Pagination from "react-js-pagination";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { createProduct, deleteProduct, getProductById, getProducts, updateProduct } from '../store/actions';
 import { connect } from 'react-redux';
-import * as action from '../store/actions'
+const src = "https://scontent.fsgn5-12.fna.fbcdn.net/v/t1.15752-9/289028921_715669672977948_2184728477575193761_n.png?_nc_cat=103&ccb=1-7&_nc_sid=ae9488&_nc_ohc=sRfFaXNtAqYAX9puhDf&_nc_ht=scontent.fsgn5-12.fna&oh=03_AVJaX9NKEN8HT8takKA_ixdaE-iOJQZCCKiQ9mK7yD0LTg&oe=63142DC9";
 
 class ListProductComponent extends Component {
 	constructor(props) {
@@ -38,7 +36,7 @@ class ListProductComponent extends Component {
 
 
 	deleteProduct(id) {
-		ProductService.deleteProduct(id).then(res => {
+		this.props.deleteProduct(id).then(res => {
 			this.setState({ products: this.state.products.filter(product => product.id !== id) });
 		});
 	}
@@ -56,7 +54,7 @@ class ListProductComponent extends Component {
 	}
 
 	formatMoney = (amt) => {
-		var money = new Intl.NumberFormat("en-US", { style: "currency", "currency": "VND" }).format(amt);
+		var money = new Intl.NumberFormat("de-DE", { style: "currency", "currency": "VND" }).format(amt);
 		return money;
 	}
 
@@ -131,6 +129,8 @@ class ListProductComponent extends Component {
 												{dataLoading ?
 													<div>
 														Loading Data...
+														<br />
+														<img src={src} />
 													</div>
 													: null
 												}
@@ -155,28 +155,28 @@ class ListProductComponent extends Component {
 													</thead>
 													<tbody>
 														{
-															Array.isArray(productList) ? 
-															productList.map((data, i) => {
-																return (
-																	<tr key={i} className="even pointer">
-																		<td className="table-td-center">
-																			{data.id}
-																		</td>
-																		<td className="table-td-center"> {data.name} </td>
-																		{/* <td className="table-td-center"> {data.price}</td> */}
-																		<td className="table-td-center"> {this.formatMoney(data.price)}</td>
-																		<td className="table-td-center"> {data.unit}</td>
-																		<td className="table-td-center"> {data.created_user}</td>
-																		<td className="table-td-center"> {data.created_at = Moment().format('DD-MM-YYYY')}</td>
-																		<td className="table-td-center"> {data.updated_user}</td>
-																		<td className="table-td-center"> {data.updated_at = Moment().format('DD-MM-YYYY')}</td>
-																		<td>
-																			<button onClick={() => this.viewProduct(data.id)} className="btn btn-info"><i className="fa fa-info-circle"></i> </button>
-																			<button data-toggle="modal" data-target=".ModalDelete" onClick={() => this.saveAndContinue(data.id)} className="btn btn-danger"><i className="fa fa-trash"></i> </button>
-																		</td>
-																	</tr>
-																)
-															}) : []
+															Array.isArray(productList) ?
+																productList.map((data, i) => {
+																	return (
+																		<tr key={i} className="even pointer">
+																			<td className="table-td-center">
+																				{data.id}
+																			</td>
+																			<td className="table-td-center"> {data.name} </td>
+																			{/* <td className="table-td-center"> {data.price}</td> */}
+																			<td className="table-td-center"> {this.formatMoney(data.price)}</td>
+																			<td className="table-td-center"> {data.unit}</td>
+																			<td className="table-td-center"> {data.created_user}</td>
+																			<td className="table-td-center"> {data.created_at = Moment().format('DD-MM-YYYY')}</td>
+																			<td className="table-td-center"> {data.updated_user}</td>
+																			<td className="table-td-center"> {data.updated_at = Moment().format('DD-MM-YYYY')}</td>
+																			<td>
+																				<button onClick={() => this.viewProduct(data.id)} className="btn btn-info"><i className="fa fa-info-circle"></i> </button>
+																				<button data-toggle="modal" data-target=".ModalDelete" onClick={() => this.saveAndContinue(data.id)} className="btn btn-danger"><i className="fa fa-trash"></i> </button>
+																			</td>
+																		</tr>
+																	)
+																}) : []
 														}
 													</tbody>
 												</table>
@@ -184,7 +184,7 @@ class ListProductComponent extends Component {
 												<Pagination
 													activePage={this.state.currentPage}
 													itemsCountPerPage={25}
-													totalItemsCount={productLength}
+													totalItemsCount={productLength || 25}
 													pageRangeDisplayed={0}
 													onChange={this.handlePageChange}
 													breakClassName={'page-item'}
