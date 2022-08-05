@@ -4,6 +4,15 @@ const initialState = {
         data: [],
         length: 0,
         loading: false,
+    },
+    // get data for update
+    detail: {
+        data: [],
+        length: 0,
+        loading: false,
+    },
+    update: {
+        message: "",
     }
 };
 

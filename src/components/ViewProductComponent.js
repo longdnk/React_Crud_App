@@ -38,14 +38,11 @@ class ViewProductComponent extends Component {
     });
 
     componentDidMount() {
-        // ProductService.getProductById(this.state.id).then(res => {
-        //     this.setState({ product: res.data.data });
-        // })
         this.props.getProductById(this.state.id);
     }
 
     editProduct(id) {
-        this.props.history.push(`/add-product/${id}`);
+        this.props.history.push(`/update-product/${id}`);
     }
 
     deleteProduct(id) {
@@ -58,12 +55,12 @@ class ViewProductComponent extends Component {
     }
 
     render() {
-        const detail_Data = this.props.example;
-        if (detail_Data.products === null) {
+        let dataStore = this.props.example.detail.data;
+        if (dataStore.products === null) {
             return <PageNotFound />
         }
         else {
-            const infoData = detail_Data.products.data;
+            const infoData = dataStore;
             return (
                 <div className="container nav-md body">
                     <div className="main_container">

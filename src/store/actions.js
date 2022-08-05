@@ -1,15 +1,16 @@
 import axios from 'axios';
 import * as CONSTANTS from "./constants"
+import { ToastContainer, toast } from 'react-toastify';
 
 const Product_API_BASE_URL = "http://34.124.251.21:8000/api/v1/admin/products";
+var retrievedObject = localStorage.getItem('token');
+const token = retrievedObject;
+const config = {
+    headers: { Authorization: `Bearer ${token}` }
+}
 
 export function getProducts(PageNumber) {
     let url = Product_API_BASE_URL + "/?page=" + PageNumber;
-    var retrievedObject = localStorage.getItem('token');
-    const token = retrievedObject;
-    const config = {
-        headers: { Authorization: `Bearer ${token}` }
-    }
     return dispatch => {
         dispatch(getProductLoadingAction())
         return axios.get(url, config).then(res => {
@@ -36,11 +37,6 @@ export function getProductLoadingAction() {
 
 export function getProductById(ProductId) {
     let url = Product_API_BASE_URL + '/' + ProductId;
-    var retrievedObject = localStorage.getItem('token');
-    const token = retrievedObject;
-    const config = {
-        headers: { Authorization: `Bearer ${token}` }
-    }
     return dispatch => {
         dispatch(getProductByIdLoadingAction())
         return axios.get(url, config).then(res => {
@@ -67,15 +63,11 @@ export function getProductByIdLoadingAction() {
 
 export function createProduct(Product) {
     let url = Product_API_BASE_URL;
-    var retrievedObject = localStorage.getItem('token');
-    const token = retrievedObject;
-    const config = {
-        headers: { Authorization: `Bearer ${token}` }
-    }
     return dispatch => {
         dispatch(createProductLoadingAction());
         return axios.post(url, Product, config).then(res => {
             dispatch(createProductAction(res.data.data));
+            res.data.code == 200 ? notifySucess("Create Product Success") : notifyError("Create Product Error !!!");
         }).catch(e => {
             console.log(e);
         });
@@ -98,25 +90,46 @@ export function createProductLoadingAction() {
 
 export function updateProduct(Product, ProductId) {
     let url = Product_API_BASE_URL + '/' + ProductId;
-    var retrievedObject = localStorage.getItem('token');
-    const token = retrievedObject;
-    const config = {
-        headers: { Authorization: `Bearer ${token}` }
-    }
     return dispatch => {
         dispatch(updateProductActionLoading())
         return axios.post(url, Product, config).then(res => {
-            dispatch(updateProductAction(res))
+            dispatch(updateProductAction(res));
+            res.data.code == 200 ? notifySucess("Update Success") : notifyError("Update Error !!!");
         }).catch(e => {
             console.log(e);
+            notifyError(e.message);
         });
     }
+}
+
+function notifyError(message) {
+    toast.error(message, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+}
+
+function notifySucess(message) {
+    toast.success(message, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
 }
 
 export function updateProductAction(res) {
     return {
         type: CONSTANTS.UPDATE_PRODUCT_ACTION,
-        payload: res.data.data,
+        payload: res.data.message,
     };
 }
 
@@ -129,17 +142,12 @@ export function updateProductActionLoading() {
 
 export function deleteProduct(ProductId) {
     let url = Product_API_BASE_URL + '/' + ProductId;
-    var retrievedObject = localStorage.getItem('token');
-    const token = retrievedObject;
-    const config = {
-        headers: { Authorization: `Bearer ${token}` }
-    }
     return dispatch => {
         dispatch(deleteProductActionLoading())
-        return axios.delete(url, ProductId, config).then(res => {
+        return axios.delete(url, config).then(res => {
             dispatch(deleteProductAction(res))
         }).catch(e => {
-            console.log(e);
+            console.log(e.message);
         });
     }
 }

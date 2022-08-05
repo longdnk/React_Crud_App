@@ -26,7 +26,7 @@ class ListProductComponent extends Component {
 	}
 
 	componentDidMount() {
-		return this.props.getProducts(1);
+		return this.props.getProducts(this.state.currentPage);
 	}
 
 	handlePageChange = pageNumber => {
@@ -36,9 +36,7 @@ class ListProductComponent extends Component {
 
 
 	deleteProduct(id) {
-		this.props.deleteProduct(id).then(res => {
-			this.setState({ products: this.state.products.filter(product => product.id !== id) });
-		});
+		this.props.deleteProduct(id);
 	}
 
 	viewProduct(id) {
@@ -50,7 +48,7 @@ class ListProductComponent extends Component {
 	}
 
 	addProduct() {
-		this.props.history.push('/add-product/_add');
+		this.props.history.push('/add-product');
 	}
 
 	formatMoney = (amt) => {
@@ -58,15 +56,18 @@ class ListProductComponent extends Component {
 		return money;
 	}
 
-	notify = () => toast.success('Product deleted successfully!!', {
-		position: "top-right",
-		autoClose: 5000,
-		hideProgressBar: false,
-		closeOnClick: true,
-		pauseOnHover: true,
-		draggable: true,
-		progress: undefined,
-	});
+	notify() {
+		toast.success('Product deleted successfully!!', {
+			position: "top-right",
+			autoClose: 5000,
+			hideProgressBar: false,
+			closeOnClick: true,
+			pauseOnHover: true,
+			draggable: true,
+			progress: undefined,
+		});
+		this.props.getProducts(this.state.currentPage);
+	}
 
 	render() {
 		const data = this.props.example;

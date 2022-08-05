@@ -5,18 +5,17 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { createProduct, deleteProduct, getProductById, getProducts, updateProduct } from '../store/actions';
 import { connect } from 'react-redux';
-import * as action from '../store/actions'
 
-class CreateProductComponent extends Component {
+class UpdateProductComponent extends Component {
     constructor(props) {
         super(props)
 
         this.state = {
             id: this.props.match.params.id,
-            name: "",
-            price: "",
-            unit: "",
-            description: "",
+            name: null,
+            price: null,
+            unit: null,
+            description: null,
             messageName: "",
             messagePrice: "",
             messageUnit: ""
@@ -28,10 +27,47 @@ class CreateProductComponent extends Component {
         this.saveOrUpdateProduct = this.saveOrUpdateProduct.bind(this);
     }
 
+    componentDidMount() {
+        if (this.state.id === '_add') {
+            return;
+        }
+        else {
+            this.props.getProductById(this.state.id);
+        }
+    }
+
+    getNotice() {
+        if (this.state.id === '_add') {
+            return "The product has been created successfully";
+        } else {
+            return "The product has been successfully updated";
+        }
+    }
+
+    notify = () => toast.success(this.getNotice(), {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        onClose: this.cancel.bind(this)
+    });
+
     saveOrUpdateProduct = (e) => {
         e.preventDefault();
-        let product = { name: this.state.name, price: this.state.price, unit: this.state.unit, description: this.state.description };
-        this.props.createProduct(product);
+        // product
+        let dataStore = this.props.example.detail.data;
+        let name = this.state.name ?? dataStore.name;
+        let price = this.state.price ?? dataStore.price;
+        let unit = this.state.unit ?? dataStore.unit;
+        let description = this.state.description ?? dataStore.description;
+        let product = { name: name, price: price, unit: unit, description: description };
+        let productId = this.props.example.detail.data.id;
+        // message
+        this.props.updateProduct(product, productId);
+
     }
 
     changeNameHandler = (event) => {
@@ -50,7 +86,23 @@ class CreateProductComponent extends Component {
     }
 
     cancel() {
-        return this.props.history.push('/');
+        if (this.state.id === '_add') {
+            return this.props.history.push('/');
+        }
+        else {
+            return this.props.history.push(`/product/${this.state.id}`);
+        }
+
+    }
+
+    getTitle() {
+        let text = '';
+        if (this.state.id === '_add') {
+            text = "Add Product";
+        } else {
+            text = "Update Product";
+        }
+        return text;
     }
 
     getpModal() {
@@ -62,7 +114,8 @@ class CreateProductComponent extends Component {
     }
 
     render() {
-        const detail_Data = this.props.example.products.data;
+        const detail_Data = this.props.example.detail.data;
+        console.log(this.props.example.update.message);
         // console.log(detail_Data.name, detail_Data.price, detail_Data.unit, detail_Data.description);
         return (
             <div className="container nav-md body">
@@ -107,7 +160,7 @@ class CreateProductComponent extends Component {
                                             <form className="" action="" method="post" noValidate>
 
                                                 <span className="section">
-                                                    <h3 className="text-center">Create Product</h3>
+                                                    <h3 className="text-center">{this.getTitle()}</h3>
                                                 </span>
 
                                                 <div className="field item form-group">
@@ -115,7 +168,7 @@ class CreateProductComponent extends Component {
                                                     <div className="col-md-6 col-sm-6">
                                                         <div className="alret-field">{this.state.messageName}</div>
                                                         {/* <input className="form-control" value={this.state.name} onChange={this.changeNameHandler} data-validate-length-range="6" data-validate-words="2" name="name" placeholder="ex. Quần short " required="required" /> */}
-                                                        <input className="form-control" onChange={this.changeNameHandler} data-validate-length-range="6" data-validate-words="2" name="name" placeholder="ex. Quần short " required="required" />
+                                                        <input className="form-control" defaultValue={detail_Data.name || ''} onChange={this.changeNameHandler} data-validate-length-range="6" data-validate-words="2" name="name" placeholder="ex. Quần short " required="required" />
                                                     </div>
                                                 </div>
                                                 <div className="field item form-group">
@@ -123,7 +176,7 @@ class CreateProductComponent extends Component {
                                                     <div className="col-md-6 col-sm-6">
                                                         <div className="alret-field">{this.state.messagePrice}</div>
                                                         {/* <input className="form-control optional" value={this.state.price} onChange={this.changePriceHandler} name="price" data-validate-length-range="5,15" type="number" /> */}
-                                                        <input className="form-control optional" onChange={this.changePriceHandler} name="price" data-validate-length-range="5,15" type="number" />
+                                                        <input className="form-control optional" defaultValue={detail_Data.price || ''} onChange={this.changePriceHandler} name="price" data-validate-length-range="5,15" type="number" />
                                                     </div>
                                                 </div>
                                                 <div className="field item form-group">
@@ -131,13 +184,13 @@ class CreateProductComponent extends Component {
                                                     <div className="col-md-6 col-sm-6">
                                                         <div className="alret-field">{this.state.messageUnit}</div>
                                                         {/* <input className="form-control" value={this.state.unit} onChange={this.changeUnitHandler} type="text" name="unit" data-validate-minmax="10,100" required='required' /></div> */}
-                                                        <input className="form-control" onChange={this.changeUnitHandler} type="text" name="unit" data-validate-minmax="10,100" required='required' /></div>
+                                                        <input className="form-control" defaultValue={detail_Data.unit || ''} onChange={this.changeUnitHandler} type="text" name="unit" data-validate-minmax="10,100" required='required' /></div>
                                                 </div>
                                                 <div className="field item form-group">
                                                     <label className="col-form-label col-md-3 col-sm-3  label-align">Description<span className="required">*</span></label>
                                                     <div className="col-md-6 col-sm-6">
                                                         {/* <textarea className="form-control date" value={this.state.description} onChange={this.changeDescriptionHandler} type="text" name="description" rows={10} required='required' /></div> */}
-                                                        <textarea className="form-control date" onChange={this.changeDescriptionHandler} type="text" name="description" rows={10} required='required' /></div>
+                                                        <textarea className="form-control date" defaultValue={detail_Data.description || ''} onChange={this.changeDescriptionHandler} type="text" name="description" rows={10} required='required' /></div>
                                                 </div>
 
                                                 <div className="form-group">
@@ -155,7 +208,9 @@ class CreateProductComponent extends Component {
                                                     <div className="modal-content">
                                                         <div className="modal-header">
                                                             <div className="modal-title" id="myModalLabel2">
-                                                                create
+                                                                {
+                                                                    this.getTitle()
+                                                                }
                                                             </div>
                                                             <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
                                                             </button>
@@ -213,4 +268,4 @@ function mapStateToProps(state) {
 
 // export default CreateProductComponent;
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateProductComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateProductComponent);

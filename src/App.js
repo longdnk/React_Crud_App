@@ -7,6 +7,7 @@ import Login from './components/Login';
 import PrivateRoute from './auth/PrivateRoute';
 import PublicRoute from './auth/PublicRoute';
 import PageNotFound from './components/404';
+import UpdateProductComponent from './components/UpdateProductComponent';
 
 function App() {
 
@@ -22,7 +23,8 @@ function App() {
 					/>
 					<PrivateRoute component={ListProductComponent} path="/" exact />
 					<PrivateRoute component={ListProductComponent} path="/products" />
-					<PrivateRoute component={CreateProductComponent} path="/add-product/:id" />
+					<PrivateRoute component={CreateProductComponent} path="/add-product/" />
+					<PrivateRoute component={UpdateProductComponent} path="/update-product/:id" />
 					<PrivateRoute component={ViewProductComponent} path="/product/:id" />
 					<PrivateRoute component={PageNotFound} />
 				</Switch>
