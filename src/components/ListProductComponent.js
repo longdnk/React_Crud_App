@@ -3,7 +3,7 @@ import HeaderComponent from './HeaderComponent';
 import Moment from 'moment';
 import LeftNavBar from './elements/LeftNavBar';
 import Pagination from "react-js-pagination";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { createProduct, deleteProduct, getProductById, getProducts, updateProduct } from '../store/actions';
 import { connect } from 'react-redux';
@@ -18,10 +18,6 @@ class ListProductComponent extends Component {
 			itemCount: 0,
 			currentPage: 1,
 		}
-
-		// this.addProduct = this.addProduct.bind(this);
-		// this.deleteProduct = this.deleteProduct.bind(this);
-		// this.saveAndContinue = this.saveAndContinue.bind(this);
 	}
 
 	componentDidMount() {
@@ -31,11 +27,7 @@ class ListProductComponent extends Component {
 	componentDidUpdate(prevProps) {
 		if (prevProps.example.reload !== this.props.example.reload && this.props.example.reload === true) {
 			this.props.example.reload = false;
-			let check = this.props.getProducts(this.state.currentPage);
-			if (check === undefined) {
-				this.state.currentPage -= 1;
-			}
-			return this.props.getProducts(this.state.currentPage);
+			this.props.getProducts(this.state.currentPage);
 		}
 	}
 	handlePageChange = pageNumber => {
@@ -60,6 +52,9 @@ class ListProductComponent extends Component {
 		this.props.history.push('/add-product');
 	}
 
+	refreshPage() {
+		window.location.reload();
+	}
 	formatMoney = (amt) => {
 		var money = new Intl.NumberFormat("de-DE", { style: "currency", "currency": "VND" }).format(amt);
 		return money;
@@ -111,7 +106,8 @@ class ListProductComponent extends Component {
 										<div className="x_title">
 											<h2>List Product</h2>
 											<ul className="nav navbar-right panel_toolbox">
-												<li><button onClick={() => this.addProduct()} className='btn btn-success'><i className="fa fa-plus"></i> New Product</button></li>
+												<li><button onClick={() => this.refreshPage()} className='btn btn-outline-primary'><i className="fa fa-refresh"></i> Reload</button></li>
+												<li><button onClick={() => this.addProduct()} className='btn btn-outline-success'><i className="fa fa-plus"></i> New Product</button></li>
 
 												<li><a className="collapse-link"><i className="fa fa-chevron-up"></i></a>
 												</li>
