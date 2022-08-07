@@ -14,8 +14,6 @@ class ViewProductComponent extends Component {
 
         this.state = {
             id: this.props.match.params.id,
-            product: {},
-            products: []
         }
         this.editProduct = this.editProduct.bind(this);
         this.deleteProduct = this.deleteProduct.bind(this);

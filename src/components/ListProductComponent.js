@@ -16,19 +16,28 @@ class ListProductComponent extends Component {
 			products: [],
 			IDDelete: "",
 			itemCount: 0,
-			isLoaded: false,
 			currentPage: 1,
 		}
 
-		this.addProduct = this.addProduct.bind(this);
-		this.deleteProduct = this.deleteProduct.bind(this);
-		this.saveAndContinue = this.saveAndContinue.bind(this);
+		// this.addProduct = this.addProduct.bind(this);
+		// this.deleteProduct = this.deleteProduct.bind(this);
+		// this.saveAndContinue = this.saveAndContinue.bind(this);
 	}
 
 	componentDidMount() {
 		return this.props.getProducts(this.state.currentPage);
 	}
 
+	componentDidUpdate(prevProps) {
+		if (prevProps.example.reload !== this.props.example.reload && this.props.example.reload === true) {
+			this.props.example.reload = false;
+			let check = this.props.getProducts(this.state.currentPage);
+			if (check === undefined) {
+				this.state.currentPage -= 1;
+			}
+			return this.props.getProducts(this.state.currentPage);
+		}
+	}
 	handlePageChange = pageNumber => {
 		this.state.currentPage = pageNumber;
 		this.props.getProducts(pageNumber);
@@ -44,7 +53,7 @@ class ListProductComponent extends Component {
 	}
 
 	saveAndContinue(id) {
-		this.setState({ IDDelete: id })
+		this.setState({ ...this.state, IDDelete: id })
 	}
 
 	addProduct() {
@@ -54,19 +63,6 @@ class ListProductComponent extends Component {
 	formatMoney = (amt) => {
 		var money = new Intl.NumberFormat("de-DE", { style: "currency", "currency": "VND" }).format(amt);
 		return money;
-	}
-
-	notify() {
-		toast.success('Product deleted successfully!!', {
-			position: "top-right",
-			autoClose: 5000,
-			hideProgressBar: false,
-			closeOnClick: true,
-			pauseOnHover: true,
-			draggable: true,
-			progress: undefined,
-		});
-		this.props.getProducts(this.state.currentPage);
 	}
 
 	render() {
@@ -156,7 +152,7 @@ class ListProductComponent extends Component {
 													</thead>
 													<tbody>
 														{
-															Array.isArray(productList) ?
+															productList ?
 																productList.map((data, i) => {
 																	return (
 																		<tr key={i} className="even pointer">
@@ -221,7 +217,7 @@ class ListProductComponent extends Component {
 							</div>
 							<div className="modal-footer">
 								<button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-								<button type="button" className="btn btn-danger" data-dismiss="modal" onClick={() => { this.deleteProduct(this.state.IDDelete); this.notify() }}>Delete</button>
+								<button type="button" className="btn btn-danger" data-dismiss="modal" onClick={() => { this.deleteProduct(this.state.IDDelete); }}>Delete</button>
 
 							</div>
 						</div>

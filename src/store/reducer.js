@@ -38,10 +38,12 @@ export function reducer(state = initialState, action) {
         case CONSTANTS.DELETE_PRODUCT_ACTION:
             return {
                 ...state,
+                reload: true
             }
         case CONSTANTS.DELETE_PRODUCT_ACTION_LOADING:
             return {
                 ...state,
+                
             }
         case CONSTANTS.GET_PRODUCT_ACTION:
             return {

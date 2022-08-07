@@ -13,7 +13,8 @@ const initialState = {
     },
     update: {
         message: "",
-    }
+    },
+    reload: false
 };
 
 export default initialState;

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as CONSTANTS from "./constants"
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 const Product_API_BASE_URL = "http://34.124.251.21:8000/api/v1/admin/products";
 var retrievedObject = localStorage.getItem('token');
@@ -67,7 +67,7 @@ export function createProduct(Product) {
         dispatch(createProductLoadingAction());
         return axios.post(url, Product, config).then(res => {
             dispatch(createProductAction(res.data.data));
-            res.data.code == 200 ? notifySucess("Create Product Success") : notifyError("Create Product Error !!!");
+            pushMessage(res.data.code, "Create");
         }).catch(e => {
             console.log(e);
         });
@@ -94,12 +94,75 @@ export function updateProduct(Product, ProductId) {
         dispatch(updateProductActionLoading())
         return axios.post(url, Product, config).then(res => {
             dispatch(updateProductAction(res));
-            res.data.code == 200 ? notifySucess("Update Success") : notifyError("Update Error !!!");
+            pushMessage(res.data.code, "Update");
         }).catch(e => {
             console.log(e);
             notifyError(e.message);
         });
     }
+}
+
+export function updateProductAction(res) {
+    return {
+        type: CONSTANTS.UPDATE_PRODUCT_ACTION,
+        payload: res.data.message,
+    };
+}
+
+export function updateProductActionLoading() {
+    return {
+        type: CONSTANTS.UPDATE_PRODUCT_ACTION_LOADING,
+        payload: null,
+    };
+}
+
+export function deleteProduct(ProductId) {
+    let url = Product_API_BASE_URL + '/' + ProductId;
+    return dispatch => {
+        dispatch(deleteProductActionLoading())
+        return axios.delete(url, config).then(res => {
+            dispatch(deleteProductAction(res))
+            pushMessage(res.data.code, "Delete");
+        }).catch(e => {
+            console.log(e.message);
+            pushMessage(141, "Error Message");
+        });
+    }
+}
+
+export function deleteProductAction(res) {
+    return {
+        type: CONSTANTS.DELETE_PRODUCT_ACTION,
+        payload: res.data.data,
+        reload: true,
+    };
+}
+
+export function deleteProductActionLoading() {
+    return {
+        type: CONSTANTS.DELETE_PRODUCT_ACTION_LOADING,
+        payload: null,
+        reload: false,
+    };
+}
+
+function pushMessage(code, actionMessage) {
+    let message = "";
+    switch (actionMessage) {
+        case "Create":
+            message = "Create ";
+            break;
+        case "Delete":
+            message = "Delete ";
+            break;
+        case "Update":
+            message = "Update ";
+            break;
+        default:
+            message = "ERR";
+            break;
+    }
+    code === 200 ? notifySucess(message + "Success") : notifyError(message + "Error !!!");
 }
 
 function notifyError(message) {
@@ -124,44 +187,4 @@ function notifySucess(message) {
         draggable: true,
         progress: undefined,
     });
-}
-
-export function updateProductAction(res) {
-    return {
-        type: CONSTANTS.UPDATE_PRODUCT_ACTION,
-        payload: res.data.message,
-    };
-}
-
-export function updateProductActionLoading() {
-    return {
-        type: CONSTANTS.UPDATE_PRODUCT_ACTION_LOADING,
-        payload: null,
-    };
-}
-
-export function deleteProduct(ProductId) {
-    let url = Product_API_BASE_URL + '/' + ProductId;
-    return dispatch => {
-        dispatch(deleteProductActionLoading())
-        return axios.delete(url, config).then(res => {
-            dispatch(deleteProductAction(res))
-        }).catch(e => {
-            console.log(e.message);
-        });
-    }
-}
-
-export function deleteProductAction(res) {
-    return {
-        type: CONSTANTS.DELETE_PRODUCT_ACTION,
-        payload: res.data.data,
-    };
-}
-
-export function deleteProductActionLoading() {
-    return {
-        type: CONSTANTS.DELETE_PRODUCT_ACTION_LOADING,
-        payload: null,
-    };
 }
