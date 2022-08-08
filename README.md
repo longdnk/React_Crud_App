@@ -4,10 +4,3 @@
   <li>npm install</li>
   <li>npm start</li>
 </ul>
-
-<style>
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
-</style>
