@@ -7,7 +7,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { createProduct, deleteProduct, getProductById, getProducts, updateProduct } from '../store/actions';
 import { connect } from 'react-redux';
-const src = "https://scontent.fsgn5-12.fna.fbcdn.net/v/t1.15752-9/289028921_715669672977948_2184728477575193761_n.png?_nc_cat=103&ccb=1-7&_nc_sid=ae9488&_nc_ohc=sRfFaXNtAqYAX9puhDf&_nc_ht=scontent.fsgn5-12.fna&oh=03_AVJaX9NKEN8HT8takKA_ixdaE-iOJQZCCKiQ9mK7yD0LTg&oe=63142DC9";
+// const src = "https://scontent.fsgn5-12.fna.fbcdn.net/v/t1.15752-9/289028921_715669672977948_2184728477575193761_n.png?_nc_cat=103&ccb=1-7&_nc_sid=ae9488&_nc_ohc=sRfFaXNtAqYAX9puhDf&_nc_ht=scontent.fsgn5-12.fna&oh=03_AVJaX9NKEN8HT8takKA_ixdaE-iOJQZCCKiQ9mK7yD0LTg&oe=63142DC9";
+const src = "https://media1.giphy.com/media/3oEjI6SIIHBdRxXI40/200.gif";
 
 class ListProductComponent extends Component {
 	constructor(props) {
@@ -53,7 +54,7 @@ class ListProductComponent extends Component {
 	}
 
 	refreshPage() {
-		window.location.reload();
+		this.props.getProducts(this.state.currentPage = 1);
 	}
 	formatMoney = (amt) => {
 		var money = new Intl.NumberFormat("de-DE", { style: "currency", "currency": "VND" }).format(amt);
@@ -164,8 +165,8 @@ class ListProductComponent extends Component {
 																			<td className="table-td-center"> {data.updated_user}</td>
 																			<td className="table-td-center"> {data.updated_at = Moment().format('DD-MM-YYYY')}</td>
 																			<td>
-																				<button onClick={() => this.viewProduct(data.id)} className="btn btn-info"><i className="fa fa-info-circle"></i> </button>
-																				<button data-toggle="modal" data-target=".ModalDelete" onClick={() => this.saveAndContinue(data.id)} className="btn btn-danger"><i className="fa fa-trash"></i> </button>
+																				<button onClick={() => this.viewProduct(data.id)} className="btn btn-outline-info"><i className="fa fa-info-circle"></i> </button>
+																				<button data-toggle="modal" data-target=".ModalDelete" onClick={() => this.saveAndContinue(data.id)} className="btn btn-outline-danger"><i className="fa fa-trash"></i> </button>
 																			</td>
 																		</tr>
 																	)

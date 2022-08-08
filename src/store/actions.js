@@ -159,10 +159,10 @@ function pushMessage(code, actionMessage) {
             message = "Update ";
             break;
         default:
-            message = "ERR";
+            message = "Action ";
             break;
     }
-    code === 200 ? notifySucess(message + "Success") : notifyError(message + "Error !!!");
+    code === CONSTANTS.CODE_SUCCESS ? notifySucess(message + "Success") : notifyError(message + "Error !!!");
 }
 
 function notifyError(message) {
